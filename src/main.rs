@@ -1,8 +1,9 @@
 use bevy::prelude::*;
 
-use crate::core::core_plugin::CorePlugin;
+use crate::{core::core_plugin::CorePlugin, screens::screen_plugin::ScreenPlugin};
 
 mod core;
+mod screens;
 
 pub const GAME_BG_COLOR: Color = Color::hsl(219., 0.40, 0.08);
 
@@ -16,7 +17,7 @@ enum GameState {
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, CorePlugin))
+        .add_plugins((DefaultPlugins, CorePlugin, ScreenPlugin))
         .init_state::<GameState>()
         .run();
 }
