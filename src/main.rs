@@ -1,3 +1,4 @@
+use avian2d::PhysicsPlugins;
 use bevy::{prelude::*, window::WindowMode};
 
 use crate::{core::core_plugin::CorePlugin, screens::screen_plugin::ScreenPlugin};
@@ -17,7 +18,7 @@ enum GameState {
 
 fn main() {
     App::new()
-        .add_plugins((CorePlugin, ScreenPlugin))
+        .add_plugins((PhysicsPlugins::default(), CorePlugin, ScreenPlugin))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "Bevy Fullscreen Window".into(),

@@ -1,6 +1,8 @@
 use crate::{
     GameState,
     screens::game::{
+        collision::collision_plugin::CollisionPlugin,
+        enemy_component::Enemy,
         enemy_systems::*,
         move_player::move_players,
         player::spawn_player,
@@ -21,10 +23,14 @@ pub struct MainPlayer;
 #[derive(Component, Clone, FromTemplate)]
 pub struct ShadowPlayer;
 
+#[derive(Component, Clone, FromTemplate)]
+pub struct GameUi;
+
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.configure_sets(Update, GameSet.run_if(in_state(GameState::Game)));
-        app.init_resource::<Score>()
+        app.add_plugins(CollisionPlugin)
+            .init_resource::<Score>()
             .insert_resource(ScoreStepTimer(Timer::from_seconds(
                 1.,
                 TimerMode::Repeating,
@@ -33,6 +39,7 @@ impl Plugin for GamePlugin {
                 OnEnter(GameState::Game),
                 (spawn_ui, spawn_player, spawn_shadow_player),
             )
+            .add_systems(OnExit(GameState::Game), cleanup_game)
             .add_systems(
                 Update,
                 (
@@ -57,6 +64,7 @@ fn spawn_ui(mut commands: Commands) {
             align_items: AlignItems::Center,
             flex_direction: FlexDirection::Column,
         }
+        GameUi
         Children [
             @spawn_score()
             --
@@ -76,4 +84,19 @@ fn spawn_divider() -> impl Scene {
             width: px(5),
         }
     }
+}
+
+fn cleanup_game(
+    enemies: Query<Entity, With<Enemy>>,
+    main_player: Single<Entity, With<MainPlayer>>,
+    shadow_player: Single<Entity, With<ShadowPlayer>>,
+    game_ui: Single<Entity, With<GameUi>>,
+    mut commands: Commands,
+) {
+    for e in enemies {
+        commands.entity(e).despawn();
+    }
+    commands.entity(*main_player).despawn();
+    commands.entity(*shadow_player).despawn();
+    commands.entity(*game_ui).despawn();
 }

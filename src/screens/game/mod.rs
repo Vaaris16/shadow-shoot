@@ -1,3 +1,4 @@
+pub mod collision;
 pub mod enemy_component;
 pub mod enemy_systems;
 pub mod game_plugin;
