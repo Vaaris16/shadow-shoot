@@ -2,8 +2,12 @@
 use avian2d::PhysicsPlugins;
 use bevy::{prelude::*, window::WindowMode};
 
-use crate::{core::core_plugin::CorePlugin, screens::screen_plugin::ScreenPlugin};
+use crate::{
+    audio::shoot_audio::background_audio, core::core_plugin::CorePlugin,
+    screens::screen_plugin::ScreenPlugin,
+};
 
+mod audio;
 mod core;
 mod screens;
 
@@ -31,6 +35,7 @@ fn main() {
             }),
             ..default()
         }))
+        .add_systems(Startup, background_audio)
         .init_state::<GameState>()
         .run();
 }

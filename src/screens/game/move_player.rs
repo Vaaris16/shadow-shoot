@@ -7,15 +7,19 @@ pub fn move_players(
     mut shadow_player: Single<&mut Transform, (With<ShadowPlayer>, Without<MainPlayer>)>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     window: Single<&Window, With<PrimaryWindow>>,
+    time: Res<Time>,
 ) {
-    if keyboard_input.just_pressed(KeyCode::ArrowRight) {
-        main_player.translation.x += 20.;
-        shadow_player.translation.x += 20.;
+    let speed = 500.0;
+    let movement_amount = speed * time.delta_secs();
+
+    if keyboard_input.pressed(KeyCode::ArrowRight) {
+        main_player.translation.x += movement_amount;
+        shadow_player.translation.x += movement_amount;
     }
 
-    if keyboard_input.just_pressed(KeyCode::ArrowLeft) {
-        main_player.translation.x -= 20.;
-        shadow_player.translation.x -= 20.;
+    if keyboard_input.pressed(KeyCode::ArrowLeft) {
+        main_player.translation.x -= movement_amount;
+        shadow_player.translation.x -= movement_amount;
     }
 
     let half_width = window.width() / 2. - 50.;

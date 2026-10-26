@@ -5,7 +5,7 @@ use crate::{
     GameState,
     screens::game::{
         enemy_component::Enemy,
-        game_plugin::{MainPlayer, ShadowPlayer},
+        game_plugin::{MainPlayer, ShadowPlayer, set_players_immune},
         player_lifes::{PlayerLifeIndicator, PlayerLifes, decrement_player_life},
     },
 };
@@ -24,8 +24,8 @@ impl Plugin for CollisionPlugin {
 
 fn collision_object_player(
     mut collisions: MessageReader<CollisionStart>,
-    main_players: Query<(), With<MainPlayer>>,
-    shadow_players: Query<(), With<ShadowPlayer>>,
+    main_players: Single<Entity, With<MainPlayer>>,
+    shadow_players: Single<Entity, With<ShadowPlayer>>,
     enemies: Query<(), With<Enemy>>,
     mut next_state: ResMut<NextState<GameState>>,
     mut player_lifes: ResMut<PlayerLifes>,
@@ -35,10 +35,10 @@ fn collision_object_player(
     for collision in collisions.read() {
         let (a, b) = (collision.collider1, collision.collider2);
 
-        if (main_players.contains(a) && enemies.contains(b))
-            || (main_players.contains(b) && enemies.contains(a))
-            || (shadow_players.contains(a) && enemies.contains(b))
-            || (shadow_players.contains(b) && enemies.contains(a))
+        if (*main_players == a && enemies.contains(b))
+            || (*main_players == b && enemies.contains(a))
+            || (*shadow_players == a && enemies.contains(b))
+            || (*shadow_players == b && enemies.contains(a))
         {
             decrement_player_life(
                 &mut player_lifes,
@@ -46,6 +46,8 @@ fn collision_object_player(
                 &mut next_state,
                 &mut commands,
             );
+            set_players_immune(&mut commands, &main_players);
+            set_players_immune(&mut commands, &shadow_players);
         }
     }
 }

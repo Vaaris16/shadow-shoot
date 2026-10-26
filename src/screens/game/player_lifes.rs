@@ -78,3 +78,7 @@ pub fn decrement_player_life(
         }
     }
 }
+
+pub fn reset_lifes(mut player_lifes: ResMut<PlayerLifes>) {
+    player_lifes.0 = 3;
+}

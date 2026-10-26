@@ -43,3 +43,7 @@ pub fn spawn_score() -> impl Scene {
         ]
     }
 }
+
+pub fn reset_score(mut score: ResMut<Score>) {
+    score.0 = 0;
+}
