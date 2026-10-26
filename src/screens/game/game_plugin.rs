@@ -6,6 +6,7 @@ use crate::{
         enemy_systems::*,
         move_player::move_players,
         player::spawn_player,
+        player_lifes::{PlayerLifes, spawn_player_ui},
         score::{Score, ScoreStepTimer, add_score, set_score, spawn_score},
         shadow_player::spawn_shadow_player,
     },
@@ -30,14 +31,15 @@ impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.configure_sets(Update, GameSet.run_if(in_state(GameState::Game)));
         app.add_plugins(CollisionPlugin)
-            .init_resource::<Score>()
+            .insert_resource(Score::default())
             .insert_resource(ScoreStepTimer(Timer::from_seconds(
                 1.,
                 TimerMode::Repeating,
             )))
+            .insert_resource(PlayerLifes::default())
             .add_systems(
                 OnEnter(GameState::Game),
-                (spawn_ui, spawn_player, spawn_shadow_player),
+                (spawn_ui, spawn_player, spawn_shadow_player, spawn_player_ui),
             )
             .add_systems(OnExit(GameState::Game), cleanup_game)
             .add_systems(

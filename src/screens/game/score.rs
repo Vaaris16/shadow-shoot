@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-#[derive(Resource, FromWorld)]
+#[derive(Resource, Default)]
 pub struct Score(pub i64);
 
 #[derive(Component, Clone, FromTemplate)]

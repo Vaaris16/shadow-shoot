@@ -6,6 +6,7 @@ use crate::{
     screens::game::{
         enemy_component::Enemy,
         game_plugin::{MainPlayer, ShadowPlayer},
+        player_lifes::{PlayerLifeIndicator, PlayerLifes, decrement_player_life},
     },
 };
 
@@ -27,6 +28,9 @@ fn collision_object_player(
     shadow_players: Query<(), With<ShadowPlayer>>,
     enemies: Query<(), With<Enemy>>,
     mut next_state: ResMut<NextState<GameState>>,
+    mut player_lifes: ResMut<PlayerLifes>,
+    player_lifes_indicators: Query<(Entity, &PlayerLifeIndicator), With<PlayerLifeIndicator>>,
+    mut commands: Commands,
 ) {
     for collision in collisions.read() {
         let (a, b) = (collision.collider1, collision.collider2);
@@ -36,7 +40,12 @@ fn collision_object_player(
             || (shadow_players.contains(a) && enemies.contains(b))
             || (shadow_players.contains(b) && enemies.contains(a))
         {
-            next_state.set(GameState::EndGame);
+            decrement_player_life(
+                &mut player_lifes,
+                player_lifes_indicators,
+                &mut next_state,
+                &mut commands,
+            );
         }
     }
 }

@@ -5,6 +5,7 @@ pub mod game_plugin;
 pub mod move_player;
 pub mod player;
 pub mod player_enemies;
+pub mod player_lifes;
 pub mod score;
 pub mod shadow_enemies;
 pub mod shadow_player;
