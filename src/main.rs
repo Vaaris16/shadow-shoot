@@ -10,8 +10,8 @@ pub const GAME_BG_COLOR: Color = Color::hsl(219., 0.40, 0.08);
 
 #[derive(States, Debug, Hash, PartialEq, Eq, Clone, Default)]
 enum GameState {
-    SplashScreen,
     #[default]
+    SplashScreen,
     Game,
     EndGame,
 }
@@ -21,8 +21,7 @@ fn main() {
         .add_plugins((PhysicsPlugins::default(), CorePlugin, ScreenPlugin))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
-                title: "Bevy Fullscreen Window".into(),
-                // Choose BorderlessFullscreen or Fullscreen
+                title: "app".into(),
                 mode: WindowMode::BorderlessFullscreen(MonitorSelection::Primary),
                 ..default()
             }),

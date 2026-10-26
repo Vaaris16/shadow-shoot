@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 #[derive(Resource, FromWorld)]
-pub struct Score(i64);
+pub struct Score(pub i64);
 
 #[derive(Component, Clone, FromTemplate)]
 pub struct ScoreText;

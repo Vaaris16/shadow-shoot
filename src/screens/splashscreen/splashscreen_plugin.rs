@@ -2,6 +2,7 @@ use std::ops::BitAndAssign;
 
 use bevy::{
     prelude::*,
+    text::FontSourceTemplate,
     ui_widgets::{Activate, Button},
 };
 
@@ -42,26 +43,36 @@ fn spawn_splash_title() -> impl Scene {
     bsn! {
         Node {
             flex_direction: FlexDirection::Row,
-            column_gap: px(15),
+            column_gap: px(30),
+            align_items: AlignItems::Center,
         }
         Children [
-            Text("The")
-            TextFont {
-                font_size: px(40),
-            }
-            TextColor(Color::WHITE)
+            (
+                Text("THE")
+                TextFont {
+                    font_size: px(100),
+                    font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
+                }
+                TextColor(Color::hsl(197., 0.89, 0.72))
+            )
+                --
+            (
+                Text("OTHER")
+                TextFont {
+                    font_size: px(100),
+                    font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
+                }
+                TextColor(Color::WHITE)
+            )
             --
-            Text("Other")
-            TextFont {
-                font_size: px(40),
-            }
-            TextColor(Color::WHITE)
-            --
-            Text("Side")
-            TextFont {
-                font_size: px(40),
-            }
-            TextColor(Color::WHITE)
+            (
+                Text("YOU")
+                TextFont {
+                    font_size: px(100),
+                    font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
+                }
+                TextColor(Color::hsl(18., 0.71, 0.66))
+            )
         ]
     }
 }
@@ -75,9 +86,10 @@ fn start_button() -> impl Scene {
         }
         on(start_game)
         Children [
-            Text("Start Game")
+            Text("PRES TO START")
             TextFont {
                 font_size: px(24),
+                font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
             }
             TextColor(Color::WHITE)
         ]
