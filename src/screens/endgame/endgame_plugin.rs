@@ -1,3 +1,5 @@
+use std::f32::consts::{FRAC_1_PI, FRAC_2_PI, FRAC_PI_4};
+
 use bevy::{
     prelude::*,
     text::FontSourceTemplate,
@@ -14,6 +16,9 @@ impl Plugin for EndgamePlugin {
             .add_systems(OnExit(GameState::EndGame), cleanup_end_game_ui);
     }
 }
+
+const CYAN: Color = Color::hsl(197.0, 0.89, 0.72);
+const ORANGE: Color = Color::hsl(18.0, 0.71, 0.66);
 
 #[derive(Component, FromTemplate, Clone)]
 struct EndGameUi;
@@ -46,26 +51,73 @@ fn endgame_background(score: &Score) -> impl Scene {
             row_gap: px(30),
         }
         BackgroundColor(Color::hsl(223., 0.30, 0.09))
-        BorderColor::all(Color::srgb(0.0, 0.75, 1.0))
+            BorderGradient::from(LinearGradient {
+                angle: FRAC_2_PI,
+                stops: vec![
+                    ColorStop::new(CYAN, percent(0)),
+                    ColorStop::new(CYAN, percent(50)),
+                    ColorStop::new(ORANGE, percent(50)),
+                    ColorStop::new(ORANGE, percent(100)),
+                ],
+                ..default()
+            })
         Children [
             @game_over_text()
-            --
-            @score_texts(score)
-            --
-            @retry_button()
+                --
+                @divider()
+                --
+                @score_texts(score)
+                --
+                @retry_button()
         ]
     }
 }
 
 fn game_over_text() -> impl Scene {
     bsn! {
-        Text("Game Over")
-        TextFont {
-            font_size: px(50),
-            font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
-
+        Node {
+            flex_direction: FlexDirection::Row,
+            align_items: AlignItems::Center,
+            column_gap: px(16),
         }
-        TextColor(Color::srgb(0.0, 0.75, 1.0))
+        Children [
+            Text("GAME")
+            TextFont {
+                font_size: px(60),
+                font: FontSourceTemplate::Handle(
+                    "fonts/inter/static/Inter_28pt-Light.ttf"
+                ),
+            }
+            TextColor(CYAN)
+            --
+            Text("OVER")
+            TextFont {
+                font_size: px(60),
+                font: FontSourceTemplate::Handle(
+                    "fonts/inter/static/Inter_28pt-Light.ttf"
+                ),
+            }
+            TextColor(ORANGE)
+        ]
+    }
+}
+
+fn divider() -> impl Scene {
+    bsn! {
+        Node {
+            width: percent(40),
+            height: px(2),
+        }
+        BackgroundGradient::from(LinearGradient {
+            angle: std::f32::consts::FRAC_PI_2,
+            stops: vec![
+                ColorStop::new(CYAN, percent(0)),
+                ColorStop::new(CYAN, percent(50)),
+                ColorStop::new(ORANGE, percent(50)),
+                ColorStop::new(ORANGE, percent(100)),
+            ],
+            ..default()
+        })
     }
 }
 
@@ -87,13 +139,13 @@ fn score_texts(score: &Score) -> impl Scene {
 
 fn score_text() -> impl Scene {
     bsn! {
-        Text("SCORE")
+        Text("score")
         TextFont {
             font_size: px(27.5),
             font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
 
         }
-        TextColor(Color::hsl(225., 0.03, 0.53))
+        TextColor(Color::hsl(225., 0.06, 0.52))
     }
 }
 
@@ -121,8 +173,18 @@ fn retry_button() -> impl Scene {
             justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
         }
+
         BackgroundColor(Color::hsl(223., 0.30, 0.09))
-        BorderColor::all(Color::srgb(0.0, 0.75, 1.0))
+            BorderGradient::from(LinearGradient {
+                angle: -FRAC_2_PI,
+                stops: vec![
+                    ColorStop::new(CYAN, percent(0)),
+                    ColorStop::new(CYAN, percent(50)),
+                    ColorStop::new(ORANGE, percent(50)),
+                    ColorStop::new(ORANGE, percent(100)),
+                ],
+                ..default()
+            })
         on(|_activate: On<Activate>, mut next_state: ResMut<NextState<GameState>>| {
             next_state.set(GameState::SplashScreen);
         })
