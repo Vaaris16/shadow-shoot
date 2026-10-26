@@ -1,3 +1,4 @@
+#![allow(warnings)]
 use avian2d::PhysicsPlugins;
 use bevy::{prelude::*, window::WindowMode};
 
@@ -8,11 +9,14 @@ mod screens;
 
 pub const GAME_BG_COLOR: Color = Color::hsl(219., 0.40, 0.08);
 
+pub const CYAN: Color = Color::hsl(197.0, 0.89, 0.72);
+pub const ORANGE: Color = Color::hsl(18.0, 0.71, 0.66);
+
 #[derive(States, Debug, Hash, PartialEq, Eq, Clone, Default)]
 enum GameState {
+    #[default]
     SplashScreen,
     Game,
-    #[default]
     EndGame,
 }
 

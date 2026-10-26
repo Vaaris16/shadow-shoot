@@ -1,4 +1,4 @@
-use std::ops::BitAndAssign;
+use std::{f32::consts::FRAC_2_PI, ops::BitAndAssign};
 
 use bevy::{
     prelude::*,
@@ -6,7 +6,7 @@ use bevy::{
     ui_widgets::{Activate, Button},
 };
 
-use crate::{GameState, screens::splashscreen};
+use crate::{CYAN, GameState, ORANGE, screens::splashscreen};
 
 pub struct SplashScreenPlugin;
 
@@ -81,17 +81,33 @@ fn start_button() -> impl Scene {
     bsn! {
         Button
         Node {
+            width: percent(15),
+            height: percent(6),
+            border: UiRect::all(px(2)),
+            border_radius: BorderRadius::MAX,
             justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
         }
+
+        BackgroundColor(Color::hsl(223., 0.30, 0.09))
+            BorderGradient::from(LinearGradient {
+                angle: -FRAC_2_PI,
+                stops: vec![
+                    ColorStop::new(CYAN, percent(0)),
+                    ColorStop::new(CYAN, percent(50)),
+                    ColorStop::new(ORANGE, percent(50)),
+                    ColorStop::new(ORANGE, percent(100)),
+                ],
+                ..default()
+            })
         on(start_game)
         Children [
             Text("PRES TO START")
-            TextFont {
-                font_size: px(24),
-                font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
-            }
-            TextColor(Color::WHITE)
+                TextFont {
+                    font_size: px(17),
+                    font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
+                }
+        TextColor(Color::WHITE)
         ]
     }
 }

@@ -1,12 +1,13 @@
 use std::f32::consts::{FRAC_1_PI, FRAC_2_PI, FRAC_PI_4};
 
 use bevy::{
+    color::palettes::css::ORANGE,
     prelude::*,
     text::FontSourceTemplate,
     ui_widgets::{Activate, Button},
 };
 
-use crate::{GameState, screens::game::score::Score};
+use crate::{CYAN, GameState, screens::game::score::Score};
 
 pub struct EndgamePlugin;
 
@@ -16,9 +17,6 @@ impl Plugin for EndgamePlugin {
             .add_systems(OnExit(GameState::EndGame), cleanup_end_game_ui);
     }
 }
-
-const CYAN: Color = Color::hsl(197.0, 0.89, 0.72);
-const ORANGE: Color = Color::hsl(18.0, 0.71, 0.66);
 
 #[derive(Component, FromTemplate, Clone)]
 struct EndGameUi;
