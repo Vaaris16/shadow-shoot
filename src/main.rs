@@ -1,13 +1,8 @@
-#![allow(warnings)]
 use avian2d::PhysicsPlugins;
-use bevy::{prelude::*, window::WindowMode};
+use bevy::{asset::AssetMetaCheck, prelude::*};
 
-use crate::{
-    audio::shoot_audio::background_audio, core::core_plugin::CorePlugin,
-    screens::screen_plugin::ScreenPlugin,
-};
+use crate::{core::core_plugin::CorePlugin, screens::screen_plugin::ScreenPlugin};
 
-mod audio;
 mod core;
 mod screens;
 
@@ -18,24 +13,30 @@ pub const ORANGE: Color = Color::hsl(18.0, 0.71, 0.66);
 
 #[derive(States, Debug, Hash, PartialEq, Eq, Clone, Default)]
 enum GameState {
-    #[default]
     SplashScreen,
     Game,
+    #[default]
     EndGame,
 }
 
 fn main() {
     App::new()
         .add_plugins((PhysicsPlugins::default(), CorePlugin, ScreenPlugin))
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                title: "app".into(),
-                mode: WindowMode::BorderlessFullscreen(MonitorSelection::Primary),
-                ..default()
-            }),
-            ..default()
-        }))
-        .add_systems(Startup, background_audio)
+        .add_plugins(
+            DefaultPlugins
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        fit_canvas_to_parent: true,
+                        title: "Shadow Shoot".into(),
+                        ..Default::default()
+                    }),
+                    ..Default::default()
+                })
+                .set(AssetPlugin {
+                    meta_check: AssetMetaCheck::Never,
+                    ..Default::default()
+                }),
+        )
         .init_state::<GameState>()
         .run();
 }

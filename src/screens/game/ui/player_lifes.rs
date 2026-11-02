@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{GameState, screens::game::player_lifes};
+use crate::GameState;
 
 #[derive(Resource)]
 pub struct PlayerLifes(pub i32);

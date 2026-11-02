@@ -1,4 +1,4 @@
-use std::{f32::consts::FRAC_2_PI, ops::BitAndAssign};
+use std::f32::consts::FRAC_2_PI;
 
 use bevy::{
     prelude::*,
@@ -6,7 +6,7 @@ use bevy::{
     ui_widgets::{Activate, Button},
 };
 
-use crate::{CYAN, GameState, ORANGE, screens::splashscreen};
+use crate::{CYAN, GameState, ORANGE};
 
 pub struct SplashScreenPlugin;
 
@@ -47,32 +47,26 @@ fn spawn_splash_title() -> impl Scene {
             align_items: AlignItems::Center,
         }
         Children [
-            (
                 Text("THE")
                 TextFont {
                     font_size: px(100),
                     font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
                 }
                 TextColor(Color::hsl(197., 0.89, 0.72))
-            )
                 --
-            (
-                Text("OTHER")
+                Text("SHADOW")
                 TextFont {
                     font_size: px(100),
                     font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
                 }
                 TextColor(Color::WHITE)
-            )
             --
-            (
-                Text("YOU")
+                Text("SHOOT")
                 TextFont {
                     font_size: px(100),
                     font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
                 }
                 TextColor(Color::hsl(18., 0.71, 0.66))
-            )
         ]
     }
 }

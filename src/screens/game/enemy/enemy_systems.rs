@@ -1,6 +1,6 @@
 use bevy::{prelude::*, window::PrimaryWindow};
 
-use crate::screens::game::{
+use crate::screens::game::enemy::{
     enemy_component::Enemy, player_enemies::spawn_player_enemy, shadow_enemies::spawn_shadow_enemy,
 };
 
@@ -12,7 +12,7 @@ pub fn maintain_enemies(
 ) {
     let enemy_num = enemies.iter().len();
 
-    if enemy_num <= 4 {
+    if enemy_num <= 5 {
         spawn_player_enemy(&mut commands, &window, &asset_server);
         spawn_shadow_enemy(&mut commands, &window, &asset_server);
     }

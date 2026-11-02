@@ -1,16 +1,21 @@
 use std::time::Duration;
 
 use crate::{
-    GameState,
+    GameState::{self},
     screens::game::{
         collision::collision_plugin::CollisionPlugin,
-        enemy_component::Enemy,
-        enemy_systems::*,
+        enemy::{
+            enemy_component::Enemy,
+            enemy_systems::{despawn_enemies, maintain_enemies, move_enemies},
+        },
         move_player::move_players,
         player::spawn_player,
-        player_lifes::{PlayerLifes, reset_lifes, spawn_player_ui},
-        score::{Score, ScoreStepTimer, add_score, reset_score, set_score, spawn_score},
         shadow_player::spawn_shadow_player,
+        ui::{
+            player_lifes::{PlayerLifes, reset_lifes},
+            score::{add_score, set_score, spawn_score},
+            ui_plugin::UiPlugin,
+        },
     },
 };
 use bevy::prelude::*;
@@ -38,16 +43,10 @@ pub struct Immune {
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.configure_sets(Update, GameSet.run_if(in_state(GameState::Game)));
-        app.add_plugins(CollisionPlugin)
-            .insert_resource(Score::default())
-            .insert_resource(ScoreStepTimer(Timer::from_seconds(
-                1.,
-                TimerMode::Repeating,
-            )))
-            .insert_resource(PlayerLifes::default())
+        app.add_plugins((CollisionPlugin, UiPlugin))
             .add_systems(
                 OnEnter(GameState::Game),
-                (spawn_ui, spawn_player, spawn_shadow_player, spawn_player_ui),
+                (spawn_ui, spawn_player, spawn_shadow_player),
             )
             .add_systems(OnExit(GameState::Game), cleanup_game)
             .add_systems(
@@ -103,7 +102,6 @@ fn cleanup_game(
     shadow_player: Single<Entity, With<ShadowPlayer>>,
     game_ui: Single<Entity, With<GameUi>>,
     mut commands: Commands,
-    score: ResMut<Score>,
     player_lifes: ResMut<PlayerLifes>,
 ) {
     for e in enemies {
@@ -113,7 +111,6 @@ fn cleanup_game(
     commands.entity(*shadow_player).despawn();
     commands.entity(*game_ui).despawn();
 
-    reset_score(score);
     reset_lifes(player_lifes);
 }
 
@@ -126,7 +123,7 @@ pub fn set_players_immune(commands: &mut Commands, player: &Entity) {
 
 fn fade_player_immune(
     time: Res<Time>,
-    mut players: Query<(&mut Sprite, Entity, &mut Immune), With<Immune>>,
+    players: Query<(&mut Sprite, Entity, &mut Immune), With<Immune>>,
     mut commands: Commands,
 ) {
     for (mut sprite, entity, mut immune) in players {

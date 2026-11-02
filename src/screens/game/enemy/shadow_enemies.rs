@@ -1,10 +1,9 @@
+use crate::screens::game::enemy::enemy_component::{Enemy, EnemyType};
 use avian2d::prelude::*;
 use bevy::prelude::*;
 
-use crate::screens::game::enemy_component::{Enemy, EnemyType};
-
-pub fn spawn_player_enemy(commands: &mut Commands, window: &Window, asset_server: &AssetServer) {
-    let mut enemy = Enemy::new(EnemyType::Player);
+pub fn spawn_shadow_enemy(commands: &mut Commands, window: &Window, asset_server: &AssetServer) {
+    let mut enemy = Enemy::new(EnemyType::Shadow);
     enemy.rand_pos(&window);
 
     commands.spawn((

@@ -1,4 +1,4 @@
-use std::f32::consts::{FRAC_1_PI, FRAC_2_PI, FRAC_PI_4};
+use std::f32::consts::FRAC_2_PI;
 
 use bevy::{
     prelude::*,
@@ -6,7 +6,7 @@ use bevy::{
     ui_widgets::{Activate, Button},
 };
 
-use crate::{CYAN, GameState, ORANGE, screens::game::score::Score};
+use crate::{CYAN, GameState, ORANGE, screens::game::ui::score::Score};
 
 pub struct EndgamePlugin;
 
