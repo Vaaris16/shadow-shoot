@@ -13,9 +13,9 @@ pub const ORANGE: Color = Color::hsl(18.0, 0.71, 0.66);
 
 #[derive(States, Debug, Hash, PartialEq, Eq, Clone, Default)]
 enum GameState {
+    #[default]
     SplashScreen,
     Game,
-    #[default]
     EndGame,
 }
 
