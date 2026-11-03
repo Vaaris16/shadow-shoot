@@ -96,7 +96,7 @@ fn start_button() -> impl Scene {
             })
         on(start_game)
         Children [
-            Text("PRES TO START")
+            Text("PRESS TO START")
                 TextFont {
                     font_size: px(17),
                     font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),

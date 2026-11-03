@@ -6,7 +6,7 @@ use crate::{
         collision::collision_plugin::CollisionPlugin,
         enemy::{
             enemy_component::Enemy,
-            enemy_systems::{despawn_enemies, maintain_enemies, move_enemies},
+            enemy_systems::{EnemyCount, despawn_enemies, maintain_enemies, move_enemies},
         },
         move_player::move_players,
         player::spawn_player,
@@ -16,6 +16,7 @@ use crate::{
             score::{add_score, set_score, spawn_score},
             ui_plugin::UiPlugin,
         },
+        update_enemy_count::{reset_enemy_count, update_enemy_count},
     },
 };
 use bevy::prelude::*;
@@ -42,13 +43,16 @@ pub struct Immune {
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.configure_sets(Update, GameSet.run_if(in_state(GameState::Game)));
-        app.add_plugins((CollisionPlugin, UiPlugin))
+        app.configure_sets(Update, GameSet.run_if(in_state(GameState::Game)))
+            .add_systems(Update, update_enemy_count)
+            .insert_resource(EnemyCount::default())
+            .add_plugins((CollisionPlugin, UiPlugin))
             .add_systems(
                 OnEnter(GameState::Game),
                 (spawn_ui, spawn_player, spawn_shadow_player),
             )
             .add_systems(OnExit(GameState::Game), cleanup_game)
+            .add_systems(OnEnter(GameState::SplashScreen), reset_enemy_count)
             .add_systems(
                 Update,
                 (
