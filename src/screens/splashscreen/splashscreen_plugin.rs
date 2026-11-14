@@ -35,6 +35,8 @@ fn spawn_splash_screen(mut commands: Commands) {
             @spawn_splash_title()
             --
             @start_button()
+            --
+            @spawn_controls_text()
         ]
     });
 }
@@ -112,4 +114,26 @@ fn start_game(_activate: On<Activate>, mut next_state: ResMut<NextState<GameStat
 
 fn cleanup_splashscreen(mut commands: Commands, splash_screen: Single<Entity, With<SplashScreen>>) {
     commands.entity(*splash_screen).despawn();
+}
+
+// Defines the controls text.
+const CONTROLS_TEXT: &str = "← MOVE LEFT → MOVE RIGHT";
+
+fn spawn_controls_text() -> impl Scene {
+    bsn! {
+            Node {
+                position_type: PositionType::Absolute,
+                bottom: px(55),
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+            }
+            Children[
+                Text(CONTROLS_TEXT)
+                TextColor(ORANGE)
+                TextFont {
+                    font: FontSourceTemplate::Handle("fonts/inter/static/Inter_28pt-Light.ttf"),
+                    font_size: px(30)
+                }
+            ]
+    }
 }

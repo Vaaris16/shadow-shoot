@@ -34,4 +34,4 @@
   document.addEventListener("keydown", resumeAudio);
   document.addEventListener("touchend", resumeAudio);
   document.addEventListener("pointerup", resumeAudio);
-})
+})();
